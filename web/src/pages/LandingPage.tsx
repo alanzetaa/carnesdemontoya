@@ -1,28 +1,13 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useProductos } from "../hooks/useProductos";
-import { ProductoCard } from "../components/catalogo/ProductoCard";
-import { CATEGORIA_LABELS } from "../constants/categorias";
-import { useCart } from "../context/CartContext";
-import { formatMoneda } from "../utils/format";
+import { useState } from "react";
 import { LoginModal } from "../components/auth/LoginModal";
 import { RegisterModal } from "../components/auth/RegisterModal";
 import { ForgotPasswordModal } from "../components/auth/ForgotPasswordModal";
-import type { Categoria, ProductoRow } from "../lib/database.types";
+import { IconBox, IconClock, IconCut, IconShield, IconTruck } from "../components/ui/Icons";
 
 type ModalAbierto = "login" | "register" | "forgot" | null;
 
 export function LandingPage() {
-  const { data: productos, isLoading } = useProductos();
-  const { totalItems, total } = useCart();
   const [modal, setModal] = useState<ModalAbierto>(null);
-  const navigate = useNavigate();
-
-  const porCategoria = useMemo(() => {
-    const grupos: Record<Categoria, ProductoRow[]> = { corte: [], combo: [] };
-    (productos ?? []).forEach((p) => grupos[p.categoria].push(p));
-    return grupos;
-  }, [productos]);
 
   return (
     <div>
@@ -45,38 +30,90 @@ export function LandingPage() {
       </header>
 
       <section className="hero">
+        <span className="hero-kicker">Establecimiento Oficial SENASA N.º 5620 · Entre Ríos</span>
         <h1>Carne premium envasada al vacío, directo del campo a tu mesa</h1>
         <p>
-          Producimos en nuestro establecimiento de Entre Ríos (SENASA N.º 5620) y enviamos con vehículo
-          refrigerado a <strong>Rosario</strong> y <strong>Buenos Aires</strong>.
+          Cortes madurados y combos familiares, con envío en vehículo refrigerado a{" "}
+          <strong>Rosario</strong> y <strong>Buenos Aires</strong>. Creá tu cuenta gratis y accedé al
+          catálogo completo con precios.
         </p>
+        <div className="hero-actions">
+          <button type="button" className="btn btn-gold" onClick={() => setModal("register")}>
+            Crear cuenta gratis
+          </button>
+          <a href="#como-funciona" className="btn btn-outline-light">
+            Ver cómo funciona
+          </a>
+        </div>
       </section>
 
-      <section className="app-content-inner app-content-wide" id="catalogo-publico">
-        <h2>Nuestros productos</h2>
-        {isLoading && <p className="hint">Cargando catálogo…</p>}
-        {(Object.keys(CATEGORIA_LABELS) as Categoria[]).map((cat) =>
-          porCategoria[cat].length > 0 ? (
-            <section key={cat} style={{ marginTop: 24 }}>
-              <h3>{CATEGORIA_LABELS[cat]}</h3>
-              <div className="producto-grid">
-                {porCategoria[cat].map((p) => (
-                  <ProductoCard key={p.id} producto={p} />
-                ))}
-              </div>
-            </section>
-          ) : null
-        )}
+      <section className="trust-bar">
+        <div className="trust-item">
+          <IconShield />
+          <span>
+            <strong>Desde 1882</strong>
+            <small>Tradición familiar entrerriana</small>
+          </span>
+        </div>
+        <div className="trust-item">
+          <IconCut />
+          <span>
+            <strong>Maduración 7–21 días</strong>
+            <small>Cortes premium envasados al vacío</small>
+          </span>
+        </div>
+        <div className="trust-item">
+          <IconTruck />
+          <span>
+            <strong>Envío refrigerado</strong>
+            <small>Cadena de frío garantizada</small>
+          </span>
+        </div>
+        <div className="trust-item">
+          <IconClock />
+          <span>
+            <strong>Rosario y Buenos Aires</strong>
+            <small>Zona de cobertura actual</small>
+          </span>
+        </div>
       </section>
 
-      <section className="app-content-inner how-it-works">
+      <section className="app-content-inner app-content-wide category-teaser-section">
+        <h2>Qué vas a encontrar</h2>
+        <p className="hint" style={{ maxWidth: 560 }}>
+          Catálogo completo con precios y stock disponible dentro de la plataforma — creá tu cuenta para
+          verlo entero y armar tu pedido.
+        </p>
+        <div className="category-teaser-grid">
+          <div className="category-teaser-card">
+            <IconCut />
+            <h3>Cortes Premium</h3>
+            <p>Lomo, entraña, ojo de bife, bife de chorizo, asado banderita y más — madurados y envasados al vacío.</p>
+          </div>
+          <div className="category-teaser-card">
+            <IconBox />
+            <h3>Combos y Cajas Familiares</h3>
+            <p>Cajas pensadas para simplificar tus comidas diarias, con una selección de cortes y preparados listos.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="app-content-inner how-it-works" id="como-funciona">
         <h2>Cómo funciona</h2>
         <ol>
-          <li>Armá tu pedido eligiendo cortes y combos del catálogo.</li>
-          <li>Creá tu cuenta (rápido, solo email y tus datos de envío) para confirmarlo.</li>
-          <li>Te contactamos por WhatsApp o email para coordinar el pago y la entrega.</li>
+          <li>Creá tu cuenta (rápido, solo email y tus datos de envío).</li>
+          <li>Elegí tus cortes y combos del catálogo, con precios y stock reales.</li>
+          <li>Confirmá el pedido — te contactamos por WhatsApp o email para coordinar el pago y la entrega.</li>
           <li>Recibís tu pedido con cadena de frío garantizada, en Rosario o Buenos Aires.</li>
         </ol>
+      </section>
+
+      <section className="cta-banner">
+        <h2>Sumate a la mesa de De Montoya</h2>
+        <p>Creá tu cuenta gratis y armá tu primer pedido en un par de minutos.</p>
+        <button type="button" className="btn btn-gold" onClick={() => setModal("register")}>
+          Crear cuenta gratis
+        </button>
       </section>
 
       <footer className="footer">
@@ -86,24 +123,6 @@ export function LandingPage() {
         </p>
         <p>WhatsApp: 11 6816-4189 · ventas@demontoya.com · @carnesdemontoya</p>
       </footer>
-
-      {totalItems > 0 && (
-        <div className="cart-float-bar">
-          <span>
-            {totalItems} producto{totalItems === 1 ? "" : "s"} en el carrito · {formatMoneda(total)}
-          </span>
-          <button
-            type="button"
-            className="btn btn-dark"
-            onClick={() => {
-              setModal("register");
-              navigate("/", { replace: true });
-            }}
-          >
-            Crear cuenta para confirmar
-          </button>
-        </div>
-      )}
 
       <LoginModal open={modal === "login"} onClose={() => setModal(null)} onForgotPassword={() => setModal("forgot")} />
       <RegisterModal open={modal === "register"} onClose={() => setModal(null)} />

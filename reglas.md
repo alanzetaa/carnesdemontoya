@@ -62,15 +62,18 @@ service_role key, se hace a mano desde el Dashboard si hace falta) ni su
 historial de pedidos (que queda con los datos del comprador "congelados",
 ver arriba).
 
-## Catálogo público, pedido con cuenta
+## Catálogo solo para cuentas registradas
 
-A diferencia de Metales Julio (comunidad privada, nada se ve sin login),
-acá el catálogo con precios **es público** — es una tienda, mostrar precios
-sin necesidad de registrarse es lo esperable. Agregar productos al carrito
-tampoco requiere cuenta (el carrito vive en `localStorage` del navegador).
-**Confirmar el pedido sí requiere cuenta** — ahí se le pide a la persona
-registrarse (con los datos mínimos de arriba) para poder coordinar la
-entrega.
+**Decisión explícita del dueño** (revisada después de ver la landing con el
+catálogo público: "los productos tienen que aparecer una vez que
+ingresas"): el catálogo con precios **no se muestra en la landing
+pública** — se ve una página de presentación de la marca ("Qué vas a
+encontrar" con las categorías, sin precios ni fotos de producto puntuales)
+pensada para dar ganas de crear una cuenta. Recién adentro (`/catalogo`,
+con sesión iniciada) se ve el catálogo real con precios y stock, y ahí se
+arma el carrito y se confirma el pedido. La tabla `productos` tiene RLS que
+bloquea la lectura a `anon` (sin sesión) — ni siquiera pegándole directo a
+la API se puede ver el catálogo sin cuenta.
 
 ## Términos y Condiciones
 

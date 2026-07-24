@@ -111,12 +111,15 @@ create trigger trg_productos_updated_at
 
 alter table public.productos enable row level security;
 
--- Una sola policy de select: público ve solo lo activo, el súper admin ve
--- todo (incluidos productos pausados/agotados que sacó de la vidriera).
+-- El catálogo (precios incluidos) es un beneficio de tener cuenta -- la
+-- landing pública NO lo muestra (pedido explícito del dueño). Una sola
+-- policy de select: cualquier cuenta logueada ve lo activo, el súper admin
+-- ve todo (incluidos productos pausados/agotados que sacó de la vidriera).
+-- Gente sin sesión (anon) no puede leer esta tabla.
 drop policy if exists "select_productos" on public.productos;
 create policy "select_productos"
   on public.productos for select
-  using (activo = true or public.es_super_admin());
+  using ((auth.uid() is not null and activo = true) or public.es_super_admin());
 
 drop policy if exists "admin_insert_productos" on public.productos;
 create policy "admin_insert_productos"

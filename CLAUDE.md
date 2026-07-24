@@ -71,9 +71,10 @@ pages/          LandingPage, CatalogoPage, CarritoPage, MisPedidosPage,
   que en Metales Julio).
 - **`productos`**: cortes y combos (`categoria`: `corte` | `combo`),
   `precio`, `unidad` (`kg`/`caja`/`unidad`), `stock`, `activo`. El catálogo
-  con precio es **público** (a diferencia de Metales Julio, esto es una
-  tienda, no una comunidad privada) — `select` de RLS permite `activo=true`
-  a cualquiera, sin login.
+  **requiere cuenta** (decisión revisada durante el build: al principio era
+  público, pero el dueño pidió que solo se vea adentro) — `select` de RLS
+  exige `auth.uid() is not null` además de `activo=true`; sin sesión no se
+  puede leer la tabla ni pegándole directo a la API REST.
 - **`pedidos` / `pedido_items`**: la solicitud de compra. Todo lo que puede
   cambiar después (datos del comprador, precio del producto) queda
   **snapshoteado** en el momento del pedido — ver reglas.md.
