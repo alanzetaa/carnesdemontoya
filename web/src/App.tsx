@@ -1,0 +1,74 @@
+import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
+import { CartProvider } from "./context/CartContext";
+import { ErrorBoundary } from "./components/layout/ErrorBoundary";
+import { AppShell } from "./components/layout/AppShell";
+import { NewPasswordModal } from "./components/auth/NewPasswordModal";
+import { LandingPage } from "./pages/LandingPage";
+import { CatalogoPage } from "./pages/CatalogoPage";
+import { CarritoPage } from "./pages/CarritoPage";
+import { MisPedidosPage } from "./pages/MisPedidosPage";
+import { PerfilPage } from "./pages/PerfilPage";
+import { AdminPage } from "./pages/AdminPage";
+import { SuspendedPage } from "./pages/stubs";
+
+const queryClient = new QueryClient();
+
+function RootRoute() {
+  const { session, loadingSession } = useAuth();
+  if (loadingSession) return null;
+  if (session) return <Navigate to="/catalogo" replace />;
+  return <LandingPage />;
+}
+
+function RequireSuperAdmin({ children }: { children: React.ReactNode }) {
+  const { isSuperAdmin, loadingProfile } = useAuth();
+  if (loadingProfile) return null;
+  if (!isSuperAdmin) return <Navigate to="/catalogo" replace />;
+  return <>{children}</>;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<RootRoute />} />
+      <Route path="/suspendido" element={<SuspendedPage />} />
+      <Route element={<AppShell />}>
+        <Route path="/catalogo" element={<CatalogoPage />} />
+        <Route path="/carrito" element={<CarritoPage />} />
+        <Route path="/mis-pedidos" element={<MisPedidosPage />} />
+        <Route path="/perfil" element={<PerfilPage />} />
+        <Route
+          path="/admin"
+          element={
+            <RequireSuperAdmin>
+              <AdminPage />
+            </RequireSuperAdmin>
+          }
+        />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export function App() {
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ToastProvider>
+            <AuthProvider>
+              <CartProvider>
+                <AppRoutes />
+                <NewPasswordModal />
+              </CartProvider>
+            </AuthProvider>
+          </ToastProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}
