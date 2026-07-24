@@ -24,9 +24,16 @@ if (typeof window !== "undefined" && window.location.hash.indexOf("access_token"
     .forEach((k) => window.localStorage.removeItem(k));
 }
 
-export const supabase = createClient<Database, "public">(SUPABASE_URL ?? "", SUPABASE_ANON_KEY ?? "", {
-  auth: { persistSession: false },
-});
+// Si faltan las variables de entorno, createClient tira una excepción con
+// una URL vacía y se cae toda la app (pantalla en blanco, sin ni siquiera
+// el ErrorBoundary). Con un placeholder con formato de URL válido, el
+// cliente se crea igual -- cualquier llamada real va a fallar con un error
+// de red manejable por el código existente, en vez de romper el import.
+export const supabase = createClient<Database, "public">(
+  SUPABASE_URL || "https://placeholder.supabase.co",
+  SUPABASE_ANON_KEY || "placeholder",
+  { auth: { persistSession: false } }
+);
 
 export const PRODUCTOS_BUCKET = "productos-fotos";
 
