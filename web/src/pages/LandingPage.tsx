@@ -23,8 +23,8 @@ export function LandingPage() {
           <button type="button" className="btn btn-outline-light" onClick={() => setModal("login")}>
             Ingresar
           </button>
-          <button type="button" className="btn btn-dark" onClick={() => setModal("register")}>
-            Crear cuenta
+          <button type="button" className="btn btn-gold" onClick={() => setModal("register")}>
+            Crear cuenta gratis
           </button>
         </div>
       </header>
@@ -37,14 +37,6 @@ export function LandingPage() {
           <strong>Rosario</strong> y <strong>Buenos Aires</strong>. Creá tu cuenta gratis y accedé al
           catálogo completo con precios.
         </p>
-        <div className="hero-actions">
-          <button type="button" className="btn btn-gold" onClick={() => setModal("register")}>
-            Crear cuenta gratis
-          </button>
-          <a href="#como-funciona" className="btn btn-outline-light">
-            Ver cómo funciona
-          </a>
-        </div>
       </section>
 
       <section className="trust-bar">
@@ -98,7 +90,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="app-content-inner how-it-works" id="como-funciona">
+      <section className="app-content-inner how-it-works">
         <h2>Cómo funciona</h2>
         <ol>
           <li>Creá tu cuenta (rápido, solo email y tus datos de envío).</li>
@@ -106,14 +98,6 @@ export function LandingPage() {
           <li>Confirmá el pedido — te contactamos por WhatsApp o email para coordinar el pago y la entrega.</li>
           <li>Recibís tu pedido con cadena de frío garantizada, en Rosario o Buenos Aires.</li>
         </ol>
-      </section>
-
-      <section className="cta-banner">
-        <h2>Sumate a la mesa de De Montoya</h2>
-        <p>Creá tu cuenta gratis y armá tu primer pedido en un par de minutos.</p>
-        <button type="button" className="btn btn-gold" onClick={() => setModal("register")}>
-          Crear cuenta gratis
-        </button>
       </section>
 
       <footer className="footer">

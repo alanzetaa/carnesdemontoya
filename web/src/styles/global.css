@@ -511,13 +511,6 @@ a {
   margin: 0 auto;
   color: var(--color-cream-2);
 }
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 26px;
-  flex-wrap: wrap;
-}
 .btn-gold {
   background: var(--color-accent);
   color: var(--color-charcoal);
@@ -599,27 +592,13 @@ a {
   margin-bottom: 8px;
 }
 
-.cta-banner {
-  background: var(--color-charcoal);
-  color: var(--color-text-light);
-  text-align: center;
-  padding: 56px 24px;
-  margin-top: 40px;
-}
-.cta-banner h2 {
-  color: var(--color-text-light);
-}
-.cta-banner p {
-  color: var(--color-cream-2);
-  margin-bottom: 22px;
-}
-
 .footer {
   background: var(--color-charcoal);
   color: var(--color-muted);
   text-align: center;
   padding: 24px;
   font-size: 13px;
+  margin-top: 40px;
 }
 
 /* ---- Catálogo / productos ---- */
