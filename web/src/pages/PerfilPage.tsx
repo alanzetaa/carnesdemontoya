@@ -6,7 +6,7 @@ import { useToast } from "../context/ToastContext";
 import { supabase } from "../lib/supabaseClient";
 import { useNominatimSearch } from "../hooks/useNominatimSearch";
 import { formatUbicacionSugerencia, extraerLocalidad, extraerProvincia, type NominatimResult } from "../utils/ubicacion";
-import { normalizeWhatsapp, formatWhatsappDisplay } from "../utils/format";
+import { normalizeWhatsapp, formatWhatsappDisplay, formatFecha } from "../utils/format";
 import { perfilSchema, type PerfilFormValues } from "../components/perfil/perfilSchema";
 import { TerminosModal } from "../components/perfil/TerminosModal";
 import { TERMINOS_VERSION_ACTUAL } from "../constants/terminos";
@@ -22,6 +22,12 @@ export function PerfilPage() {
     null
   );
   const { suggestions, loading: buscandoDireccion } = useNominatimSearch(direccionQuery);
+
+  // Una vez aceptados, los Términos y Condiciones quedan bloqueados (no se
+  // puede "desaceptar") -- mismo criterio que Metales Julio. Si en el
+  // futuro se sube TERMINOS_VERSION_ACTUAL, esto vuelve a false solo y se
+  // vuelve a pedir la aceptación.
+  const yaAceptoVersionActual = profile?.terminos_version_aceptada === TERMINOS_VERSION_ACTUAL;
 
   const {
     register,
@@ -42,7 +48,7 @@ export function PerfilPage() {
       apellido: profile.apellido,
       direccion: profile.direccion,
       whatsapp: profile.whatsapp ? formatWhatsappDisplay(profile.whatsapp) : "",
-      terminosAceptados: profile.terminos_version_aceptada >= TERMINOS_VERSION_ACTUAL,
+      terminosAceptados: profile.terminos_version_aceptada === TERMINOS_VERSION_ACTUAL,
     });
     setDireccionQuery(profile.direccion ?? "");
     setDireccionVerificada(Boolean(profile.direccion));
@@ -165,16 +171,31 @@ export function PerfilPage() {
           </div>
         </div>
 
-        <label className="checkbox-row">
-          <input type="checkbox" {...register("terminosAceptados")} />
-          <span>
-            Acepto los{" "}
-            <button type="button" className="link-btn" onClick={() => setTerminosOpen(true)}>
-              Términos y Condiciones
-            </button>
-          </span>
-        </label>
-        {errors.terminosAceptados && <p className="field-error">{errors.terminosAceptados.message}</p>}
+        {yaAceptoVersionActual ? (
+          <label className="checkbox-row" style={{ color: "var(--color-muted)" }}>
+            <input type="checkbox" checked disabled />
+            <span>
+              Aceptaste los{" "}
+              <button type="button" className="link-btn" onClick={() => setTerminosOpen(true)}>
+                Términos y Condiciones
+              </button>{" "}
+              el {formatFecha(profile?.terminos_aceptados_at)}. No se puede deshacer.
+            </span>
+          </label>
+        ) : (
+          <>
+            <label className="checkbox-row">
+              <input type="checkbox" {...register("terminosAceptados")} />
+              <span>
+                Acepto los{" "}
+                <button type="button" className="link-btn" onClick={() => setTerminosOpen(true)}>
+                  Términos y Condiciones
+                </button>
+              </span>
+            </label>
+            {errors.terminosAceptados && <p className="field-error">{errors.terminosAceptados.message}</p>}
+          </>
+        )}
 
         <div className="form-actions">
           <button type="submit" className="btn btn-dark" disabled={isSubmitting}>
