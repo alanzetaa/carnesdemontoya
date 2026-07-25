@@ -19,7 +19,7 @@ export function CatalogoPage() {
 
   return (
     <div className="app-content-inner app-content-wide">
-      <h2>Catálogo</h2>
+      <h2>Productos</h2>
       <p className="hint">Elegí tus cortes y combos, agregalos al carrito y confirmá tu pedido.</p>
 
       {isLoading && <p className="hint">Cargando catálogo…</p>}

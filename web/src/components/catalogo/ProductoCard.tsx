@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { ProductoRow } from "../../lib/database.types";
 import { formatMoneda, parseCantidadDecimal } from "../../utils/format";
 import { useCart } from "../../context/CartContext";
@@ -7,14 +7,13 @@ import { fotoProductoUrl } from "../../lib/supabaseClient";
 const PASO_POR_UNIDAD: Record<ProductoRow["unidad"], number> = { kg: 0.5, caja: 1, unidad: 1 };
 
 export function ProductoCard({ producto }: { producto: ProductoRow }) {
-  const { addItem } = useCart();
+  const { items, addItem } = useCart();
   const paso = PASO_POR_UNIDAD[producto.unidad];
   const [cantidadTexto, setCantidadTexto] = useState(String(paso));
-  const [agregado, setAgregado] = useState(false);
-  const timeoutRef = useRef<number | undefined>(undefined);
   const agotado = producto.stock <= 0;
-
-  useEffect(() => () => window.clearTimeout(timeoutRef.current), []);
+  // Persiste mientras el producto siga en el carrito (no un timeout que
+  // desaparece solo) -- pedido explícito del dueño.
+  const enCarrito = items.some((i) => i.productoId === producto.id);
 
   return (
     <div className="producto-card">
@@ -56,15 +55,12 @@ export function ProductoCard({ producto }: { producto: ProductoRow }) {
                 const cantidad = parseCantidadDecimal(cantidadTexto, paso);
                 setCantidadTexto(String(cantidad));
                 addItem(producto, cantidad);
-                setAgregado(true);
-                window.clearTimeout(timeoutRef.current);
-                timeoutRef.current = window.setTimeout(() => setAgregado(false), 1500);
               }}
             >
               Agregar
             </button>
-            {agregado && (
-              <span className="producto-agregado-check" title="Agregado al carrito">
+            {enCarrito && (
+              <span className="producto-agregado-check" title="Ya está en tu carrito">
                 ✓
               </span>
             )}

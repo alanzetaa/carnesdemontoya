@@ -18,7 +18,7 @@ export function Sidebar() {
     <nav className="app-sidebar" id="appSidebar">
       <NavLink to="/catalogo" className={navItemClass}>
         <span className="app-nav-icon" />
-        Catálogo
+        Productos
       </NavLink>
       <NavLink to="/carrito" className={navItemClass}>
         <span className="app-nav-icon" />
