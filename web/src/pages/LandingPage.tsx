@@ -14,6 +14,7 @@ export function LandingPage() {
       <header className="public-header">
         <div className="app-topbar-row">
           <img src="/logo-transparent.png" alt="De Montoya — Carnes Entrerrianas, desde 1882" className="logo-img" />
+          <span className="header-contact">WhatsApp: 11 6816-4189 · @carnesdemontoya</span>
           <div style={{ display: "flex", gap: 10 }}>
             <button type="button" className="btn btn-outline-light" onClick={() => setModal("login")}>
               Ingresar
@@ -33,7 +34,6 @@ export function LandingPage() {
           <strong>Rosario</strong> y <strong>Buenos Aires</strong>. Creá tu cuenta gratis y accedé al
           catálogo completo con precios.
         </p>
-        <p className="hero-contact">WhatsApp: 11 6816-4189 · ventas@demontoya.com · @carnesdemontoya</p>
       </section>
 
       <section className="trust-bar">

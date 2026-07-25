@@ -400,6 +400,11 @@ a {
 .auth-greeting {
   font-size: 14px;
 }
+.header-contact {
+  color: var(--color-cream-2);
+  font-size: 13px;
+  white-space: nowrap;
+}
 
 /* ---- Shell / sidebar ---- */
 
@@ -515,12 +520,6 @@ a {
   color: var(--color-cream-2);
   font-size: clamp(16px, 1.8vw, 21px);
 }
-.hero p.hero-contact {
-  margin-top: 18px;
-  font-size: 14px;
-  color: var(--color-accent);
-  letter-spacing: 0.3px;
-}
 .btn-gold {
   background: var(--color-accent);
   color: var(--color-charcoal);
@@ -535,6 +534,7 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
   flex-shrink: 0;
 }
 .trust-item {
