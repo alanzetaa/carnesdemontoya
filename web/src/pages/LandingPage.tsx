@@ -33,6 +33,7 @@ export function LandingPage() {
           <strong>Rosario</strong> y <strong>Buenos Aires</strong>. Creá tu cuenta gratis y accedé al
           catálogo completo con precios.
         </p>
+        <p className="hero-contact">WhatsApp: 11 6816-4189 · ventas@demontoya.com · @carnesdemontoya</p>
       </section>
 
       <section className="trust-bar">
@@ -65,14 +66,6 @@ export function LandingPage() {
           </span>
         </div>
       </section>
-
-      <footer className="footer">
-        <p>
-          De Montoya — Carnes Entrerrianas, desde 1882. Producido en Establecimiento Oficial SENASA N.º
-          5620.
-        </p>
-        <p>WhatsApp: 11 6816-4189 · ventas@demontoya.com · @carnesdemontoya</p>
-      </footer>
 
       <LoginModal open={modal === "login"} onClose={() => setModal(null)} onForgotPassword={() => setModal("forgot")} />
       <RegisterModal open={modal === "register"} onClose={() => setModal(null)} />
