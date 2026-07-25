@@ -14,16 +14,16 @@ export function LandingPage() {
       <header className="public-header">
         <div className="app-topbar-row">
           <img src="/logo-transparent.png" alt="De Montoya — Carnes Entrerrianas, desde 1882" className="logo-img" />
-          <span className="header-contact">WhatsApp: 11 6816-4189 · @carnesdemontoya</span>
           <div style={{ display: "flex", gap: 10 }}>
             <button type="button" className="btn btn-outline-light" onClick={() => setModal("login")}>
               Ingresar
             </button>
             <button type="button" className="btn btn-gold" onClick={() => setModal("register")}>
-              Crear cuenta gratis
+              Crear cuenta
             </button>
           </div>
         </div>
+        <p className="header-contact">WhatsApp: 11 6816-4189 · @carnesdemontoya</p>
       </header>
 
       <section className="hero">

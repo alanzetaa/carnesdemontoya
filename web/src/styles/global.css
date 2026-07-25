@@ -403,7 +403,8 @@ a {
 .header-contact {
   color: var(--color-cream-2);
   font-size: 13px;
-  white-space: nowrap;
+  text-align: center;
+  margin: 10px 0 0;
 }
 
 /* ---- Shell / sidebar ---- */
@@ -881,5 +882,18 @@ a {
   }
   .app-content {
     padding: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Logo + Ingresar + Crear cuenta tienen que entrar en una sola fila
+     incluso en celulares angostos (el WhatsApp ya está en su propia fila
+     abajo, no compite por espacio acá). */
+  .public-header .logo-img {
+    height: 42px;
+  }
+  .public-header .btn {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
