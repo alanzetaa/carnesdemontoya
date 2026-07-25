@@ -356,10 +356,18 @@ a {
 
 /* ---- Topbar / logo ---- */
 
+/* A diferencia de .public-header (landing), acá el logo tiene que quedar
+   alineado con el borde del sidebar de abajo (sin centrar en una franja
+   angosta) -- por eso el flex va directo en .app-topbar, a todo el ancho,
+   sin pasar por .app-topbar-row. */
 .app-topbar {
   background: var(--color-charcoal);
   color: var(--color-text-light);
   padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 .app-topbar-row {
   display: flex;
@@ -477,7 +485,7 @@ a {
     linear-gradient(rgba(20, 18, 15, 0.82), rgba(20, 18, 15, 0.9)),
     linear-gradient(135deg, var(--color-charcoal) 0%, var(--color-wood) 100%);
   color: var(--color-text-light);
-  padding: 32px 24px;
+  padding: 40px 24px;
   text-align: center;
   flex: 1 1 auto;
   min-height: 0;
@@ -492,20 +500,20 @@ a {
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 .hero h1 {
   color: var(--color-text-light);
-  font-size: clamp(32px, 5.2vw, 56px);
-  line-height: 1.15;
-  max-width: 900px;
-  margin: 0 auto 18px;
+  font-size: clamp(34px, 6.2vw, 64px);
+  line-height: 1.12;
+  max-width: 940px;
+  margin: 0 auto 20px;
 }
 .hero p {
-  max-width: 680px;
+  max-width: 700px;
   margin: 0 auto;
   color: var(--color-cream-2);
-  font-size: clamp(16px, 1.6vw, 20px);
+  font-size: clamp(16px, 1.8vw, 21px);
 }
 .btn-gold {
   background: var(--color-accent);
@@ -528,7 +536,7 @@ a {
   align-items: center;
   gap: 12px;
   color: var(--color-text-light);
-  padding: 16px 24px;
+  padding: 13px 24px;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 .trust-item:last-child {
@@ -555,7 +563,7 @@ a {
   background: var(--color-charcoal);
   color: var(--color-muted);
   text-align: center;
-  padding: 20px;
+  padding: 16px;
   font-size: 13px;
   flex-shrink: 0;
 }

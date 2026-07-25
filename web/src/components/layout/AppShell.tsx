@@ -19,16 +19,14 @@ export function AppShell() {
   return (
     <div>
       <header className="app-topbar">
-        <div className="app-topbar-row">
-          <img src="/logo-transparent.png" alt="De Montoya" className="logo-img logo-img-compact" />
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <span className="auth-greeting">
-              Hola{profile ? `, ${capitalizarNombre(profile.nombre)}` : ""}
-            </span>
-            <button type="button" className="btn btn-dark" id="logoutBtn" onClick={() => void supabase.auth.signOut()}>
-              Salir
-            </button>
-          </div>
+        <img src="/logo-transparent.png" alt="De Montoya" className="logo-img logo-img-compact" />
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <span className="auth-greeting">
+            Hola{profile ? `, ${capitalizarNombre(profile.nombre)}` : ""}
+          </span>
+          <button type="button" className="btn btn-dark" id="logoutBtn" onClick={() => void supabase.auth.signOut()}>
+            Salir
+          </button>
         </div>
       </header>
       <div className="app-shell">
