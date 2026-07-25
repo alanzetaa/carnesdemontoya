@@ -379,6 +379,7 @@ a {
   background: var(--color-charcoal);
   color: var(--color-text-light);
   padding: 14px 24px;
+  flex-shrink: 0;
 }
 .logo-img {
   height: 62px;
@@ -458,10 +459,17 @@ a {
 
 /* Toda la landing es oscura -- el fondo de la página tiene que serlo
    también (no el crema por default del body), si no queda una franja
-   crema debajo del footer en pantallas más altas que el contenido. */
+   crema debajo del footer en pantallas más altas que el contenido.
+   Layout en columna a 100vh: header/trust-bar/footer con su alto natural
+   (flex-shrink:0) y el hero ocupa el resto (flex:1) centrado -- así la
+   landing entra en una sola pantalla sin scroll en la mayoría de los
+   monitores, y en pantallas muy bajas simplemente scrollea en vez de
+   recortar contenido (min-height, no height fijo). */
 .landing-page {
   background: var(--color-charcoal);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero {
@@ -469,23 +477,29 @@ a {
     linear-gradient(rgba(20, 18, 15, 0.82), rgba(20, 18, 15, 0.9)),
     linear-gradient(135deg, var(--color-charcoal) 0%, var(--color-wood) 100%);
   color: var(--color-text-light);
-  padding: 140px 24px 120px;
+  padding: 32px 24px;
   text-align: center;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .hero-kicker {
   display: inline-block;
   color: var(--color-accent);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 .hero h1 {
   color: var(--color-text-light);
-  font-size: clamp(36px, 6vw, 64px);
+  font-size: clamp(32px, 5.2vw, 56px);
+  line-height: 1.15;
   max-width: 900px;
-  margin: 0 auto 22px;
+  margin: 0 auto 18px;
 }
 .hero p {
   max-width: 680px;
@@ -507,13 +521,14 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
 }
 .trust-item {
   display: flex;
   align-items: center;
   gap: 12px;
   color: var(--color-text-light);
-  padding: 20px 24px;
+  padding: 16px 24px;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 .trust-item:last-child {
@@ -540,8 +555,9 @@ a {
   background: var(--color-charcoal);
   color: var(--color-muted);
   text-align: center;
-  padding: 24px;
+  padding: 20px;
   font-size: 13px;
+  flex-shrink: 0;
 }
 
 /* ---- Catálogo / productos ---- */
