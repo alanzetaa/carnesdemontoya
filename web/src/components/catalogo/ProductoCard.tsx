@@ -20,6 +20,7 @@ export function ProductoCard({ producto }: { producto: ProductoRow }) {
         ) : (
           <div className="producto-card-img-placeholder" aria-hidden="true" />
         )}
+        {producto.categoria === "combo" && <span className="producto-badge-categoria">Combo</span>}
         {agotado && <span className="producto-badge-agotado">Agotado</span>}
       </div>
       <div className="producto-card-body">

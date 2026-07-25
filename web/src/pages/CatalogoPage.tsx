@@ -1,16 +1,20 @@
 import { useMemo } from "react";
 import { useProductos } from "../hooks/useProductos";
 import { ProductoCard } from "../components/catalogo/ProductoCard";
-import { CATEGORIA_LABELS } from "../constants/categorias";
-import type { Categoria, ProductoRow } from "../lib/database.types";
 
 export function CatalogoPage() {
   const { data: productos, isLoading } = useProductos();
 
-  const porCategoria = useMemo(() => {
-    const grupos: Record<Categoria, ProductoRow[]> = { corte: [], combo: [] };
-    (productos ?? []).forEach((p) => grupos[p.categoria].push(p));
-    return grupos;
+  // Cortes primero, combos después, pero en una sola grilla -- separarlos
+  // en secciones distintas dejaba filas a medio llenar (ej. un solo corte
+  // desperdiciando el resto del ancho) cuando la cantidad de productos por
+  // categoría no completa una fila entera.
+  const ordenados = useMemo(() => {
+    const lista = productos ?? [];
+    return [...lista].sort((a, b) => {
+      if (a.categoria !== b.categoria) return a.categoria === "corte" ? -1 : 1;
+      return a.orden - b.orden;
+    });
   }, [productos]);
 
   return (
@@ -20,22 +24,15 @@ export function CatalogoPage() {
 
       {isLoading && <p className="hint">Cargando catálogo…</p>}
 
-      {(Object.keys(CATEGORIA_LABELS) as Categoria[]).map((cat) =>
-        porCategoria[cat].length > 0 ? (
-          <section key={cat} style={{ marginTop: 24 }}>
-            <h3>{CATEGORIA_LABELS[cat]}</h3>
-            <div className="producto-grid">
-              {porCategoria[cat].map((p) => (
-                <ProductoCard key={p.id} producto={p} />
-              ))}
-            </div>
-          </section>
-        ) : null
+      {ordenados.length > 0 && (
+        <div className="producto-grid" style={{ marginTop: 20 }}>
+          {ordenados.map((p) => (
+            <ProductoCard key={p.id} producto={p} />
+          ))}
+        </div>
       )}
 
-      {!isLoading && (productos ?? []).length === 0 && (
-        <p className="hint">Todavía no hay productos cargados.</p>
-      )}
+      {!isLoading && ordenados.length === 0 && <p className="hint">Todavía no hay productos cargados.</p>}
     </div>
   );
 }
