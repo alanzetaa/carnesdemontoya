@@ -361,8 +361,7 @@ a {
   color: var(--color-text-light);
   padding: 12px 20px;
 }
-.app-topbar-row,
-.public-header {
+.app-topbar-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -371,6 +370,11 @@ a {
   max-width: 1200px;
   margin: 0 auto;
 }
+/* .public-header es el <header> de la landing pública: ocupa TODO el ancho
+   (fondo carbón de punta a punta); el centrado a 1200px pasa a la
+   .app-topbar-row de adentro -- si el max-width se pone acá directo, el
+   fondo se recorta y quedan franjas del color de body a los costados en
+   pantallas anchas (bug real, reportado por el dueño). */
 .public-header {
   background: var(--color-charcoal);
   color: var(--color-text-light);
@@ -523,51 +527,12 @@ a {
   color: var(--color-muted);
 }
 
-.category-teaser-section {
-  padding-top: 40px;
-}
-.category-teaser-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-  margin-top: 20px;
-}
-.category-teaser-card {
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-top: 3px solid var(--color-accent);
-  border-radius: 10px;
-  padding: 24px;
-}
-.category-teaser-card svg {
-  color: var(--color-accent-dark);
-}
-.category-teaser-card h3 {
-  margin: 12px 0 6px;
-}
-.category-teaser-card p {
-  font-size: 14px;
-  color: var(--color-muted);
-  margin: 0;
-}
-
-.how-it-works {
-  padding-top: 16px;
-}
-.how-it-works ol {
-  padding-left: 20px;
-}
-.how-it-works li {
-  margin-bottom: 8px;
-}
-
 .footer {
   background: var(--color-charcoal);
   color: var(--color-muted);
   text-align: center;
   padding: 24px;
   font-size: 13px;
-  margin-top: 40px;
 }
 
 /* ---- Catálogo / productos ---- */
