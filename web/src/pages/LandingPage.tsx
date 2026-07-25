@@ -10,7 +10,7 @@ export function LandingPage() {
   const [modal, setModal] = useState<ModalAbierto>(null);
 
   return (
-    <div>
+    <div className="landing-page">
       <header className="public-header">
         <div className="app-topbar-row">
           <img src="/logo-transparent.png" alt="De Montoya — Carnes Entrerrianas, desde 1882" className="logo-img" />

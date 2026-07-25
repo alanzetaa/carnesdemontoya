@@ -456,6 +456,14 @@ a {
 
 /* ---- Landing pública ---- */
 
+/* Toda la landing es oscura -- el fondo de la página tiene que serlo
+   también (no el crema por default del body), si no queda una franja
+   crema debajo del footer en pantallas más altas que el contenido. */
+.landing-page {
+  background: var(--color-charcoal);
+  min-height: 100vh;
+}
+
 .hero {
   background: radial-gradient(circle at 20% 20%, rgba(201, 162, 39, 0.1), transparent 45%),
     linear-gradient(rgba(20, 18, 15, 0.82), rgba(20, 18, 15, 0.9)),
