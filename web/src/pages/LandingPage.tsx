@@ -12,13 +12,7 @@ export function LandingPage() {
   return (
     <div>
       <header className="public-header">
-        <span className="logo">
-          <span className="logo-badge">DM</span>
-          <span className="logo-text">
-            <strong>DE MONTOYA</strong>
-            <span>Carnes Entrerrianas · Desde 1882</span>
-          </span>
-        </span>
+        <img src="/logo-transparent.png" alt="De Montoya — Carnes Entrerrianas, desde 1882" className="logo-img" />
         <div style={{ display: "flex", gap: 10 }}>
           <button type="button" className="btn btn-outline-light" onClick={() => setModal("login")}>
             Ingresar

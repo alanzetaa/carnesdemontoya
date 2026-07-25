@@ -20,14 +20,7 @@ export function AppShell() {
     <div>
       <header className="app-topbar">
         <div className="app-topbar-row">
-          <span className="logo">
-            <span className="logo-badge">DM</span>
-            <span className="logo-text">
-              <strong>DE MONTOYA</strong>
-              <span>Carnes Entrerrianas</span>
-            </span>
-          </span>
-          <span className="app-slogan">Desde 1882</span>
+          <img src="/logo-transparent.png" alt="De Montoya" className="logo-img logo-img-compact" />
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <span className="auth-greeting">
               Hola{profile ? `, ${capitalizarNombre(profile.nombre)}` : ""}
