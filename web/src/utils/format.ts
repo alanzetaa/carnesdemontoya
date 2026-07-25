@@ -61,3 +61,14 @@ export function whatsappLink(normalized: string | null | undefined, mensaje?: st
   const base = `https://wa.me/${normalized}`;
   return mensaje ? `${base}?text=${encodeURIComponent(mensaje)}` : base;
 }
+
+/**
+ * Parsea una cantidad tipeada a mano, aceptando tanto "0,5" como "0.5" --
+ * la gente escribe con el separador decimal que le sale natural, y un
+ * input type="number" nativo rechaza la coma en varios navegadores.
+ */
+export function parseCantidadDecimal(texto: string, minimo = 0): number {
+  const valor = Number(texto.replace(",", ".").trim());
+  if (!Number.isFinite(valor) || valor < minimo) return minimo;
+  return valor;
+}

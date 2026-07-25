@@ -1,11 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { supabase } from "../lib/supabaseClient";
-import { formatMoneda, formatWhatsappDisplay, normalizeWhatsapp } from "../utils/format";
+import { formatMoneda, formatWhatsappDisplay, normalizeWhatsapp, parseCantidadDecimal } from "../utils/format";
+
+/** Acepta "0,5" o "0.5" -- misma idea que en ProductoCard. */
+function CantidadInput({
+  cantidad,
+  onCommit,
+}: {
+  cantidad: number;
+  onCommit: (valor: number) => void;
+}) {
+  const [texto, setTexto] = useState(String(cantidad));
+
+  useEffect(() => setTexto(String(cantidad)), [cantidad]);
+
+  function confirmar() {
+    onCommit(parseCantidadDecimal(texto, 0));
+  }
+
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      className="producto-cantidad"
+      value={texto}
+      onChange={(e) => {
+        const val = e.target.value;
+        if (/^[0-9]*[.,]?[0-9]*$/.test(val)) setTexto(val);
+      }}
+      onBlur={confirmar}
+    />
+  );
+}
 
 export function CarritoPage() {
   const { items, total, updateCantidad, removeItem, clear } = useCart();
@@ -90,14 +121,7 @@ export function CarritoPage() {
             <tr key={i.productoId}>
               <td>{i.nombre}</td>
               <td>
-                <input
-                  type="number"
-                  className="producto-cantidad"
-                  min={0}
-                  step={i.unidad === "kg" ? 0.5 : 1}
-                  value={i.cantidad}
-                  onChange={(e) => updateCantidad(i.productoId, Number(e.target.value) || 0)}
-                />{" "}
+                <CantidadInput cantidad={i.cantidad} onCommit={(valor) => updateCantidad(i.productoId, valor)} />{" "}
                 {i.unidad}
               </td>
               <td>{formatMoneda(i.precio)}</td>

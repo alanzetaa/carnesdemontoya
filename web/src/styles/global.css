@@ -656,14 +656,21 @@ a {
 }
 .producto-card-actions {
   display: flex;
+  align-items: center;
   gap: 8px;
   margin-top: auto;
 }
 .producto-cantidad {
-  width: 70px;
+  width: 60px;
   padding: 8px;
   border: 1px solid var(--color-border);
   border-radius: 6px;
+  text-align: center;
+}
+.producto-agregado-check {
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 18px;
 }
 
 /* ---- Carrito ---- */

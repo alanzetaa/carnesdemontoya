@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ProductoRow } from "../../lib/database.types";
-import { formatMoneda } from "../../utils/format";
+import { formatMoneda, parseCantidadDecimal } from "../../utils/format";
 import { useCart } from "../../context/CartContext";
 import { fotoProductoUrl } from "../../lib/supabaseClient";
 
@@ -9,8 +9,12 @@ const PASO_POR_UNIDAD: Record<ProductoRow["unidad"], number> = { kg: 0.5, caja: 
 export function ProductoCard({ producto }: { producto: ProductoRow }) {
   const { addItem } = useCart();
   const paso = PASO_POR_UNIDAD[producto.unidad];
-  const [cantidad, setCantidad] = useState(paso);
+  const [cantidadTexto, setCantidadTexto] = useState(String(paso));
+  const [agregado, setAgregado] = useState(false);
+  const timeoutRef = useRef<number | undefined>(undefined);
   const agotado = producto.stock <= 0;
+
+  useEffect(() => () => window.clearTimeout(timeoutRef.current), []);
 
   return (
     <div className="producto-card">
@@ -33,24 +37,37 @@ export function ProductoCard({ producto }: { producto: ProductoRow }) {
         {!agotado && (
           <div className="producto-card-actions">
             <input
-              type="number"
+              type="text"
+              inputMode="decimal"
               className="producto-cantidad"
-              min={paso}
-              step={paso}
-              value={cantidad}
-              onChange={(e) => setCantidad(Math.max(paso, Number(e.target.value) || paso))}
+              value={cantidadTexto}
+              onChange={(e) => {
+                const val = e.target.value;
+                // solo dígitos y un separador decimal (coma o punto) mientras se tipea
+                if (/^[0-9]*[.,]?[0-9]*$/.test(val)) setCantidadTexto(val);
+              }}
+              onBlur={() => setCantidadTexto(String(parseCantidadDecimal(cantidadTexto, paso)))}
               aria-label={`Cantidad de ${producto.nombre}`}
             />
             <button
               type="button"
               className="btn btn-dark"
               onClick={() => {
+                const cantidad = parseCantidadDecimal(cantidadTexto, paso);
+                setCantidadTexto(String(cantidad));
                 addItem(producto, cantidad);
-                setCantidad(paso);
+                setAgregado(true);
+                window.clearTimeout(timeoutRef.current);
+                timeoutRef.current = window.setTimeout(() => setAgregado(false), 1500);
               }}
             >
               Agregar
             </button>
+            {agregado && (
+              <span className="producto-agregado-check" title="Agregado al carrito">
+                ✓
+              </span>
+            )}
           </div>
         )}
       </div>

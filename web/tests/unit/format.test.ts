@@ -6,6 +6,7 @@ import {
   formatMoneda,
   formatWhatsappDisplay,
   normalizeWhatsapp,
+  parseCantidadDecimal,
   whatsappLink,
 } from "../../src/utils/format";
 
@@ -58,6 +59,25 @@ describe("normalizeWhatsapp / formatWhatsappDisplay", () => {
   });
   it("formatWhatsappDisplay devuelve guion largo si no hay número", () => {
     expect(formatWhatsappDisplay(null)).toBe("—");
+  });
+});
+
+describe("parseCantidadDecimal", () => {
+  it("acepta coma como separador decimal", () => {
+    expect(parseCantidadDecimal("0,5")).toBe(0.5);
+  });
+  it("acepta punto como separador decimal", () => {
+    expect(parseCantidadDecimal("0.5")).toBe(0.5);
+  });
+  it("acepta números enteros", () => {
+    expect(parseCantidadDecimal("1")).toBe(1);
+  });
+  it("aplica el mínimo si el valor es menor", () => {
+    expect(parseCantidadDecimal("0,2", 0.5)).toBe(0.5);
+  });
+  it("aplica el mínimo si el texto no es un número válido", () => {
+    expect(parseCantidadDecimal("abc", 0.5)).toBe(0.5);
+    expect(parseCantidadDecimal("", 1)).toBe(1);
   });
 });
 
