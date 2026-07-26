@@ -408,6 +408,8 @@ grant execute on function public.admin_eliminar_perfil(uuid) to authenticated;
 
 -- Listado completo de pedidos con sus items agregados en un solo jsonb (evita
 -- N+1 llamadas desde el front para armar el detalle de cada pedido en HQ).
+drop function if exists public.admin_listar_pedidos();
+
 create or replace function public.admin_listar_pedidos()
 returns table (
   id uuid,
