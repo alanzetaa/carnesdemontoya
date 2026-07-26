@@ -61,6 +61,7 @@ export function MisPedidosPage() {
           <p className="hint" style={{ margin: 0 }}>
             Envío a: {pedido.direccion_envio}
           </p>
+          {pedido.mensaje_admin && <p className="pedido-mensaje-admin">De Montoya: {pedido.mensaje_admin}</p>}
         </div>
       ))}
     </div>

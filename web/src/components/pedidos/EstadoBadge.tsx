@@ -1,6 +1,6 @@
 import type { EstadoPedido } from "../../lib/database.types";
 
-const ESTADO_LABELS: Record<EstadoPedido, string> = {
+export const ESTADO_LABELS: Record<EstadoPedido, string> = {
   pendiente: "Pendiente",
   confirmado: "Confirmado",
   entregado: "Entregado",

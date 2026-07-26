@@ -63,8 +63,12 @@ export function AdminPage() {
     void queryClient.invalidateQueries({ queryKey: QUERY_KEY });
   }
 
-  async function handleCambiarEstadoPedido(id: string, estado: EstadoPedido) {
-    const { error } = await supabase.rpc("admin_actualizar_estado_pedido", { p_pedido_id: id, p_nuevo_estado: estado });
+  async function handleCambiarEstadoPedido(id: string, estado: EstadoPedido, mensaje: string | null) {
+    const { error } = await supabase.rpc("admin_actualizar_estado_pedido", {
+      p_pedido_id: id,
+      p_nuevo_estado: estado,
+      p_mensaje: mensaje,
+    });
     if (error) {
       showToast(`Error: ${error.message}`);
       return;
@@ -163,7 +167,7 @@ export function AdminPage() {
         <AdminPedidosTable
           pedidos={data?.pedidos ?? []}
           isLoading={isLoading}
-          onCambiarEstado={(id, estado) => void handleCambiarEstadoPedido(id, estado)}
+          onCambiarEstado={(id, estado, mensaje) => void handleCambiarEstadoPedido(id, estado, mensaje)}
         />
       )}
 

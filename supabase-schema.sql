@@ -159,6 +159,10 @@ create table if not exists public.pedidos (
   estado text not null default 'pendiente'
     check (estado in ('pendiente', 'confirmado', 'entregado', 'cancelado')),
   total numeric(12, 2) not null default 0,
+  -- Mensaje opcional que HQ deja al cambiar el estado (ej. "Salió hoy,
+  -- llega mañana a la tarde"). Se pisa con el siguiente cambio de estado,
+  -- no es un historial.
+  mensaje_admin text,
   created_at timestamptz not null default now()
 );
 
@@ -416,6 +420,7 @@ returns table (
   direccion_envio text,
   notas text,
   total numeric,
+  mensaje_admin text,
   items jsonb
 )
 language sql
@@ -425,6 +430,7 @@ as $$
   select
     p.id, p.created_at, p.estado, p.comprador_nombre, p.comprador_apellido,
     p.comprador_email, p.whatsapp_contacto, p.direccion_envio, p.notas, p.total,
+    p.mensaje_admin,
     coalesce((
       select jsonb_agg(jsonb_build_object(
         'nombre_producto', pi.nombre_producto,
@@ -445,10 +451,15 @@ grant execute on function public.admin_listar_pedidos() to authenticated;
 -- Cambia el estado de un pedido. Si pasa a "cancelado" desde cualquier otro
 -- estado, reintegra el stock de cada item. Si un pedido cancelado se
 -- reactiva a otro estado, vuelve a descontar el stock (puede fallar con un
--- mensaje legible si ya no alcanza).
+-- mensaje legible si ya no alcanza). p_mensaje es opcional (lo escribe HQ en
+-- el diálogo de confirmación) y queda visible para el comprador en "Mis
+-- pedidos"; null borra el mensaje anterior.
+drop function if exists public.admin_actualizar_estado_pedido(uuid, text);
+
 create or replace function public.admin_actualizar_estado_pedido(
   p_pedido_id uuid,
-  p_nuevo_estado text
+  p_nuevo_estado text,
+  p_mensaje text default null
 )
 returns void
 language plpgsql
@@ -474,6 +485,7 @@ begin
   end if;
 
   if v_estado_actual = p_nuevo_estado then
+    update public.pedidos set mensaje_admin = p_mensaje where id = p_pedido_id;
     return;
   end if;
 
@@ -497,11 +509,11 @@ begin
     end loop;
   end if;
 
-  update public.pedidos set estado = p_nuevo_estado where id = p_pedido_id;
+  update public.pedidos set estado = p_nuevo_estado, mensaje_admin = p_mensaje where id = p_pedido_id;
 end;
 $$;
 
-grant execute on function public.admin_actualizar_estado_pedido(uuid, text) to authenticated;
+grant execute on function public.admin_actualizar_estado_pedido(uuid, text, text) to authenticated;
 
 -- Resumen para los tiles de HQ: miembros, pedidos totales, pedidos
 -- pendientes, ingresos de pedidos no cancelados.

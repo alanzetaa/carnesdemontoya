@@ -1,16 +1,20 @@
+import { useState } from "react";
 import type { AdminPedidoRow, EstadoPedido } from "../../lib/database.types";
 import { formatFecha, formatMoneda, formatWhatsappDisplay } from "../../utils/format";
 import { EstadoBadge } from "../pedidos/EstadoBadge";
+import { CambiarEstadoModal } from "./CambiarEstadoModal";
 
 const ESTADOS: EstadoPedido[] = ["pendiente", "confirmado", "entregado", "cancelado"];
 
 interface Props {
   pedidos: AdminPedidoRow[];
   isLoading?: boolean;
-  onCambiarEstado: (id: string, estado: EstadoPedido) => void;
+  onCambiarEstado: (id: string, estado: EstadoPedido, mensaje: string | null) => void;
 }
 
 export function AdminPedidosTable({ pedidos, isLoading, onCambiarEstado }: Props) {
+  const [pendiente, setPendiente] = useState<{ pedido: AdminPedidoRow; estado: EstadoPedido } | null>(null);
+
   if (isLoading) return <p className="hint">Cargando…</p>;
   if (pedidos.length === 0) return <p className="hint">Todavía no hay pedidos.</p>;
 
@@ -47,7 +51,10 @@ export function AdminPedidosTable({ pedidos, isLoading, onCambiarEstado }: Props
           </p>
           <div className="pedido-card-footer">
             <p className="pedido-total">Total: {formatMoneda(p.total)}</p>
-            <select value={p.estado} onChange={(e) => onCambiarEstado(p.id, e.target.value as EstadoPedido)}>
+            <select
+              value={p.estado}
+              onChange={(e) => setPendiente({ pedido: p, estado: e.target.value as EstadoPedido })}
+            >
               {ESTADOS.map((e) => (
                 <option key={e} value={e}>
                   {e}
@@ -57,6 +64,19 @@ export function AdminPedidosTable({ pedidos, isLoading, onCambiarEstado }: Props
           </div>
         </div>
       ))}
+
+      <CambiarEstadoModal
+        open={pendiente !== null}
+        clienteNombre={pendiente ? `${pendiente.pedido.comprador_nombre} ${pendiente.pedido.comprador_apellido}` : ""}
+        nuevoEstado={pendiente?.estado ?? null}
+        mensajeActual={pendiente?.pedido.mensaje_admin ?? null}
+        onClose={() => setPendiente(null)}
+        onConfirm={(mensaje) => {
+          if (!pendiente) return;
+          onCambiarEstado(pendiente.pedido.id, pendiente.estado, mensaje);
+          setPendiente(null);
+        }}
+      />
     </div>
   );
 }

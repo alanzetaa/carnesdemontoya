@@ -726,6 +726,14 @@ a {
   gap: 12px;
   flex-wrap: wrap;
 }
+.pedido-mensaje-admin {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--color-accent) 12%, white);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 4px;
+  font-size: 13px;
+}
 .estado-badge {
   background: color-mix(in srgb, var(--estado-color) 18%, white);
   color: var(--estado-color);

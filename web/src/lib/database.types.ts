@@ -73,6 +73,7 @@ export type PedidoRow = {
   notas: string | null;
   estado: EstadoPedido;
   total: number;
+  mensaje_admin: string | null;
   created_at: string;
 };
 
@@ -119,6 +120,7 @@ export type AdminPedidoRow = {
   direccion_envio: string;
   notas: string | null;
   total: number;
+  mensaje_admin: string | null;
   items: AdminPedidoItem[];
 };
 
@@ -156,7 +158,10 @@ export type Database = {
       admin_suspender_usuario: { Args: { target_id: string; hasta: string | null }; Returns: void };
       admin_eliminar_perfil: { Args: { target_id: string }; Returns: void };
       admin_listar_pedidos: { Args: Record<string, never>; Returns: AdminPedidoRow[] };
-      admin_actualizar_estado_pedido: { Args: { p_pedido_id: string; p_nuevo_estado: EstadoPedido }; Returns: void };
+      admin_actualizar_estado_pedido: {
+        Args: { p_pedido_id: string; p_nuevo_estado: EstadoPedido; p_mensaje: string | null };
+        Returns: void;
+      };
       admin_stats_resumen: { Args: Record<string, never>; Returns: StatsResumenRow[] };
       admin_stats_pedidos_por_dia: { Args: Record<string, never>; Returns: StatsPorDiaRow[] };
     };
