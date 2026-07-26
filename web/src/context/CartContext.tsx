@@ -88,7 +88,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   }
 
-  const totalItems = useMemo(() => items.reduce((sum, i) => sum + i.cantidad, 0), [items]);
+  // Cantidad de productos distintos en el carrito, no la suma de cantidades
+  // -- "cantidad" puede estar en kg/cajas/unidades, sumarlas no tiene
+  // sentido como badge (2kg de un solo corte no son "2 productos").
+  const totalItems = useMemo(() => items.length, [items]);
   const total = useMemo(() => items.reduce((sum, i) => sum + i.cantidad * i.precio, 0), [items]);
 
   return (
