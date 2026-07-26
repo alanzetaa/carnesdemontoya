@@ -166,6 +166,11 @@ create table if not exists public.pedidos (
   created_at timestamptz not null default now()
 );
 
+-- "create table if not exists" no toca una tabla que ya existe -- si se
+-- corre este script sobre una base creada antes de que existiera esta
+-- columna, hace falta agregarla a mano.
+alter table public.pedidos add column if not exists mensaje_admin text;
+
 alter table public.pedidos enable row level security;
 
 -- Solo lectura por RLS: cada persona ve sus propios pedidos, HQ los ve
