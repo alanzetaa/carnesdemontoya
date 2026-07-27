@@ -881,22 +881,67 @@ a {
 @media (max-width: 780px) {
   .app-shell {
     grid-template-columns: 1fr;
+    /* Sin esto, la fila del sidebar hereda el "stretch" por defecto de
+       grid y se estira para ocupar el alto sobrante de .app-shell (que
+       tiene min-height a pantalla completa), dejando un bloque oscuro
+       vacío debajo de los tabs. */
+    grid-template-rows: auto 1fr;
   }
+  /* En celular el sidebar pasa a ser una barra de tabs horizontal: cada
+     item se reparte el ancho a partes iguales (flex:1) en vez de crecer
+     según su contenido -- así "Mi carrito" no le come el lugar a los
+     demás ni el texto se envuelve en una columna angosta y desprolija. */
   .app-sidebar {
     flex-direction: row;
+    align-items: center;
     overflow-x: auto;
-    padding: 8px;
+    padding: 6px 4px;
+    gap: 2px;
+  }
+  .app-nav-item {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 8px 2px;
+    font-size: 11px;
+    text-align: center;
+    min-width: 60px;
+  }
+  .app-nav-icon {
+    width: auto;
+  }
+  .nav-badge {
+    position: absolute;
+    top: -3px;
+    right: 2px;
+    margin-left: 0;
+    font-size: 10px;
+    padding: 0 5px;
   }
   .app-nav-item-admin {
     margin-top: 0;
     border-top: none;
-    padding-top: 10px;
+    padding-top: 8px;
   }
   .form-row.two-cols {
     grid-template-columns: 1fr;
   }
   .app-content {
     padding: 16px;
+  }
+  .app-topbar {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .cart-table th:nth-child(3),
+  .cart-table td:nth-child(3) {
+    display: none;
+  }
+  .cart-table th,
+  .cart-table td {
+    padding: 8px 4px;
+    font-size: 13px;
   }
 }
 
